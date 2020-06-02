@@ -31,10 +31,6 @@
         новых автомобилей
       </p>
       <form action="post">
-        <!-- <p>
-          <input type="file" accept="image/*" multiple @change="filePicked($event)" ref="fileInput">
-          <img :src="imageURL" alt="">
-        </p> -->
         <input class="subscribe-input" type="email" placeholder="Ваш E-mail">
         <button class="subscribe-action">подписаться</button>
       </form>
@@ -43,37 +39,7 @@
 </template>
 
 <script>
-// import firebase from 'firebase/app'
-
 export default {
 
-  data () {
-    return {
-      // pickedFile: null,
-      // pickedFileName: '',
-      // imageURL: ''
-    }
-  },
-
-  methods: {
-    // filePicked (e) {
-    //   this.pickedFile = e.target.files[0]
-    //   this.pickedFileName = e.target.files[0].name
-
-    //   const storageRef = firebase.storage().ref('images/' + this.pickedFileName)
-    //   const uploadTask = storageRef.put(this.pickedFile)
-
-    //   uploadTask.on('state_changed', snapshot => {
-    //     const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-    //     console.log(progress)
-    //   }, error => {
-    //     console.log(error.message)
-    //   }, () => {
-    //     uploadTask.snapshot.ref.getDownloadURL().then(downnloadUrl => {
-    //       this.imageURL = downnloadUrl
-    //     })
-    //   })
-    // }
-  }
 }
 </script>

@@ -18,9 +18,6 @@ import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase/app'
 export default {
   name: 'Cars',
-  components: {
-    //
-  },
 
   data () {
     return {
@@ -54,7 +51,6 @@ export default {
   },
 
   beforeMount () {
-    // this.loading = true
     this.getAdvs().then((list) => {
       this.loading = false
       this.carList = list
@@ -86,7 +82,6 @@ export default {
   padding-top: 250px;
   color: #ffffff;
   background: black;
-  // opacity: 0.4;
   position: fixed;
   top: 0;
   left: 0;

@@ -5,12 +5,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 export default {
-  name: 'Calculator',
-  components: {
-    //
-  }
+  name: 'Calculator'
 }
 </script>

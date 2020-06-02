@@ -54,7 +54,7 @@
 
         <div class="input-field checkbox">
           <label for="window">На витрину</label>
-          <input id="window" type="checkbox" :disabled="windowFull" v-model="windowCar" @input="check">
+          <input id="window" type="checkbox" :disabled="windowFull" v-model="windowCar">
         </div>
         <div class="create-new-form" @click="createAd">
           Создать новый Автомобиль
@@ -111,7 +111,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 /* eslint-disable */
 import firebase from 'firebase/app'
 
@@ -119,9 +118,6 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Admin',
-  components: {
-    //
-  },
 
   data: () => ({
     login: '',
@@ -184,12 +180,6 @@ export default {
           }
         }
       })
-
-    },
-
-    check () {
-      this.windowCar = !this.windowCar
-      console.log(this.windowCar)
     },
 
     onFileChange(e) {
@@ -212,7 +202,6 @@ export default {
     },
 
     async uploadImages (e) {
-
       let fileUpload = this.$refs.fileInput
       let files = fileUpload.files
       let newImageURLs = []
@@ -243,7 +232,6 @@ export default {
 
     },
 
-
     async createAd () {
       const carData = {
         make: this.make,
@@ -266,9 +254,8 @@ export default {
         const carAdv = await this.$store.dispatch('createAdv', carData)
         this.carAdvId = carAdv.id
         this.profileDataFilled = true
-        console.log(this.carAdvId)
       } catch (error) {
-        console.log(error)
+        throw error
       }
     },
 

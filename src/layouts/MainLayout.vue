@@ -13,11 +13,7 @@ export default {
   name: 'main-layout',
   components: {
     NavBar
-  },
-
-  data: () => ({
-    //
-  })
+  }
 }
 </script>
 

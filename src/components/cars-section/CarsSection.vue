@@ -3,7 +3,6 @@
       <div class="cars-section_title">
         Автомобили
       </div>
-
       <cars-tabs @renderPopular="setPopularCarsComponent" @renderInStock="setInStockCarsComponent"/>
       <cars-section-content :renderPopular="showPopularCarsComponent"/>
   </section>

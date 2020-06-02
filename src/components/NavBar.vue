@@ -31,16 +31,9 @@
 </template>
 
 <script>
-// import firebase from 'firebase/app'
 import { mapGetters } from 'vuex'
 
 export default {
-  data () {
-    return {
-      // user: this.showAdminLink
-    }
-  },
-
   computed: {
     ...mapGetters(['getUser']),
 
