@@ -10,6 +10,11 @@ import 'firebase/database'
 import 'firebase/storage'
 
 import './assets/styles/styles.scss'
+import '../node_modules/@braid/vue-formulate/themes/snow/snow.scss'
+
+import VueFormulate from '@braid/vue-formulate'
+
+Vue.use(VueFormulate)
 
 Vue.config.productionTip = false
 
@@ -37,7 +42,5 @@ firebase.auth().onAuthStateChanged((user) => {
   }
   store.commit('updateUser', user)
 })
-store.dispatch('getAdvs')
 
-// const dbRefObject = firebase.database().ref()
-// dbRefObject.on('value', snap => console.log(snap.val()))
+store.dispatch('getAllAdvs')

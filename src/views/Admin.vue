@@ -1,188 +1,294 @@
 <template>
   <div class="admin-page">
+    <div class="loader" v-if="loader"></div>
+    <button class="logout" @click="logout">LOGOUT</button>
 
-    <!-- Car details Form -->
-    <div class="car-profile-form-creation">
-      <div class="form">
-        <div class="input-field">
-          <input type="text" v-model="make" placeholder="Марка">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="model" placeholder="Модель">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="year" placeholder="Год">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model.number="engineVolume" placeholder="Объём">
-        </div>
-
-        <div class="input-field" placeholder="">
-          <input type="text" v-model="status" placeholder="Статус">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="damageGrade" placeholder="Степень повреждений">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="running" placeholder="На ходу">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="fixPartsAvailable" placeholder="Наличие запчастей для ремонта">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="milege" placeholder="Пробег">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="additionalCosts" placeholder="Дополнительные оплаты">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="customTaxed" placeholder="Растаможен">
-        </div>
-
-        <div class="input-field">
-          <input type="text" v-model="price" placeholder="Цена">
-        </div>
-
-        <div class="input-field checkbox">
-          <label for="window">На витрину</label>
-          <input id="window" type="checkbox" :disabled="windowFull" v-model="windowCar">
-        </div>
-        <div class="create-new-form" @click="createAd">
-          Создать новый Автомобиль
-        </div>
-      </div>
+    <div class="tabs-wrapper">
+      <div class="creation-tab tab" :class="{'active' : creationTabActive}" @click="tabSwitcher">Создание обьявления Автомобиля</div>
+      <div class="edit-tab tab" :class="{'active' : !creationTabActive}" @click="tabSwitcher">Список Автомобилей / Редактирование</div>
     </div>
 
-    <!-- Car Images Block -->
-    <div class="car-images-block" v-show="profileDataFilled">
+    <div class="creation-area" v-if="creationTabActive">
 
-      <input type="file" accept="image/*" multiple ref="fileInput" @change="onFileChange">
-      <button @click="uploadImages">UPLOAD IMAGES</button>
-      <div class="image-preview-wrapper">
-        <div class="image-preview" v-for="(image, key) in images" :key="key">
-            <div>
-              <img class="preview" :ref="'image'" />
-              {{ image.name }}
+      <!-- Car details Form -->
+      <div class="car-profile-form-creation">
+        <div class="form">
+          <div class="form-line">
+            <div class="input-field">
+              <input type="text" v-model="carDetails.make" placeholder="Марка">
+            </div>
+            <div class="input-field">
+              <input type="text" v-model="carDetails.model" placeholder="Модель">
             </div>
           </div>
+          <div class="form-line">
+            <div class="input-field">
+              <input type="text" v-model="carDetails.year" placeholder="Год">
+            </div>
+
+            <div class="input-field">
+              <input type="text" v-model.number="carDetails.engineVolume" placeholder="Объём">
+            </div>
+          </div>
+
+          <div class="form-line">
+            <div class="input-field" placeholder="">
+              <input type="text" v-model="carDetails.status" placeholder="Статус">
+            </div>
+
+            <div class="input-field">
+              <input type="text" v-model="carDetails.damageGrade" placeholder="Степень повреждений">
+            </div>
+          </div>
+
+          <div class="form-line">
+            <div class="input-field">
+              <input type="text" v-model="carDetails.running" placeholder="На ходу">
+            </div>
+
+            <div class="input-field">
+              <input type="text" v-model="carDetails.fixPartsAvailable" placeholder="Наличие запчастей для ремонта">
+            </div>
+          </div>
+
+          <div class="form-line">
+            <div class="input-field">
+              <input type="text" v-model="carDetails.milege" placeholder="Пробег">
+            </div>
+
+            <div class="input-field">
+              <input type="text" v-model="carDetails.additionalCosts" placeholder="Дополнительные оплаты">
+            </div>
+          </div>
+
+          <div class="form-line">
+            <div class="input-field">
+              <input type="text" v-model="carDetails.customTaxed" placeholder="Растаможен">
+            </div>
+
+            <div class="input-field">
+              <input type="text" v-model="carDetails.price" placeholder="Цена">
+            </div>
+          </div>
+
+          <div class="form-line">
+            <div class="input-field checkbox">
+              <label for="window">На витрину</label>
+              <input id="window" type="checkbox" :disabled="windowFull" v-model="carDetails.windowCar">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Car Images Block -->
+      <div class="car-images-block">
+        <div class="select-file-box">
+          <div class="choose-foto-btn-block">
+            <input type="file" accept="image/*" multiple ref="fileInput" id="file-select" @change="imageFileSelection">
+            <label for="file-select">Выбрать фотографии</label>
+          </div>
+          <div class="create-adv-button-block">
+            <button v-if="showCreateAdvButton" class="create-adv" @click="uploadImages">Создать обьявление</button>
+          </div>
+        </div>
+        <div class="image-preview-wrapper" v-if="images">
+          <div class="image-preview" v-for="(image, key) in images" :key="key">
+
+              <img class="preview" :ref="'image'" />
+              <div class="image-name">
+                {{ image.name }}
+
+              </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Car List Block -->
+    <div class="edit-area" v-if="!creationTabActive">
+      <!-- Car List Block -->
+      <div class="car-list-block">
+        <div class="car-list-item" :class="{'open': advEditModeOn }" v-for="car in advList" :key="car.id">
+          <div class="car-details-block">
+            <div class="car-image">
+              <img v-if="car.imageURLs" :src="car.imageURLs[0]" alt="CarPreview">
+            </div>
+            <div class="car-name-info">
+              <span class="car-make">{{car.make}}</span>
+              <span class="car-model">{{car.model}}</span>
+              <span class="car-year">{{car.year}}</span>
+            </div>
+            <div class="car-milege">
+              <span class="milege-header">Пробег</span>
+              <span class="milege-count">{{car.milege}}</span>
+            </div>
 
-    <div class="car-list-block">
-      <div class="car-list-item">
-        <div class="car-image">
-          <img src="@/assets/img/in_stock_cars_img/car2.jpg" alt="CarPreview">
-        </div>
-        <div class="car-name-info">
-          <span class="car-make">AUDI</span>
-          <span class="car-model">A4 B8 Avant</span>
-          <span class="car-year">2014</span>
-        </div>
-        <div class="car-milege">
-          <span class="milege-header">Пробег</span>
-          <span class="milege-count">15 000</span>
-        </div>
+            <div class="car-price">
+              <span class="car-price-header">Цена</span>
+              <span class="car-price-amount">{{car.price}} $</span>
+            </div>
 
-        <div class="car-price">
-          <span class="car-price-header">Цена</span>
-          <span class="car-price-amount">15 000 $</span>
-        </div>
+            <div class="car-adv-action-block" ref="reloader" >
+              <div class="edit-action" v-if="advEditModeOn" :data-id="car.carAdvId" @click="stopEdition" ref="edit">Отменить</div>
+              <div class="edit-action" v-else :data-id="car.carAdvId" @click="editAdv($event)" ref="edit">Редактировать</div>
+              <div class="delete-action" :data-id="car.carAdvId" @click="deleteAdv" ref="delete">Удалить</div>
+            </div>
+          </div>
+          <div class="car-edit-form">
+            <div class="car-profile-form-edition">
+              <div class="form">
+                <div class="form-line">
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.make" placeholder="Марка">
+                  </div>
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.model" placeholder="Модель">
+                  </div>
+                </div>
+                <div class="form-line">
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.year" placeholder="Год">
+                  </div>
 
-        <div class="car-adv-action-block">
-          <div class="edit-action">Редактировать</div>
-          <div class="delete-action">Удалить</div>
+                  <div class="input-field">
+                    <input type="text" v-model.number="advEditDetails.engineVolume" placeholder="Объём">
+                  </div>
+                </div>
+
+                <div class="form-line">
+                  <div class="input-field" placeholder="">
+                    <input type="text" v-model="advEditDetails.status" placeholder="Статус">
+                  </div>
+
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.damageGrade" placeholder="Степень повреждений">
+                  </div>
+                </div>
+
+                <div class="form-line">
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.running" placeholder="На ходу">
+                  </div>
+
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.fixPartsAvailable" placeholder="Наличие запчастей для ремонта">
+                  </div>
+                </div>
+
+                <div class="form-line">
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.milege" placeholder="Пробег">
+                  </div>
+
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.additionalCosts" placeholder="Дополнительные оплаты">
+                  </div>
+                </div>
+
+                <div class="form-line">
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.customTaxed" placeholder="Растаможен">
+                  </div>
+
+                  <div class="input-field">
+                    <input type="text" v-model="advEditDetails.price" placeholder="Цена">
+                  </div>
+                </div>
+
+                <div class="form-line">
+                  <div class="input-field checkbox">
+                    <label for="window">На витрину</label>
+                    <input id="window" type="checkbox" :disabled="windowFull" v-model="carDetails.windowCar">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="images-edition-wrapper" v-if="editionImages && advEditModeOn">
+              <div class="images-edition-block" v-for="(imageObject, index) in editionImages" :key="index">
+                <img :src="imageObject.url" alt="LOGO">
+                <div>{{imageObject.name}}</div>
+                <span :data-id="imageObject.id" :data-name="imageObject.name" @click="deleteEditionPicture($event)">Delete</span>
+              </div>
+            </div>
+            <button class="finish-editing" @click="finishEditing">Закончить редактирование</button>
+          </div>
         </div>
       </div>
+
     </div>
 
-      <button class="logout" @click="logout">LOGOUT</button>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import firebase from 'firebase/app'
-
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Admin',
 
   data: () => ({
-    login: '',
-    password: '',
-    dataBoom: null,
-    pickedFiles: null,
-    pickedFileNames: [],
-    images: [],
-    profileDataFilled: false,
-    windowFull: null,
+    carDetails: {
+      make: '',
+      model: '',
+      year: '',
+      engineVolume: '',
+      status: '',
+      damageGrade: '',
+      running: '',
+      fixPartsAvailable: '',
+      milege: null,
+      additionalCosts: '',
+      customTaxed: '',
+      price: null,
+      windowCar: false,
+      windowCarImageUrl: 'lolo',
+      imageURLs: [],
+      carAdvId: '',
+    },
 
-    make: '',
-    model: '',
-    year: null,
-    engineVolume: null,
-    status: '',
-    damageGrade: '',
-    running: '',
-    fixPartsAvailable: '',
-    milege: null,
-    additionalCosts: '',
-    customTaxed: '',
-    price: null,
-    windowCar: false,
-    windowCarImageUrl: '',
-    imageURLs: [],
-    carAdvId: ''
+    advEditDetails: {},
+
+    beginOfEditinState: {},
+    images: [],
+    editionImages: [],
+    imagesDeletedOnEdit: [],
+    windowFull: null,
+    carList: [],
+    advEditModeOn: false,
+    editionId: '',
+    loader: false,
+    creationTabActive: true,
+    createBtnDisabled: true,
+    showCreateAdvButton: false
   }),
 
-  computed: {
-    ...mapGetters(['getCarList']),
 
-    carList () {
-      return this.getCarList
-    }
+  computed: {
+    ...mapGetters(['advList', 'currentAdvId', 'currentAdv']),
   },
 
   watch: {
-    getCarList: {
+    advList: {
       handler: function(val) {
+        console.log(val)
         this.setWindowFull(val)
+        this.carList = val
+        this.carDetails.carAdvId = this.currentAdvId
       },
       deep: true
     }
   },
 
   methods: {
-    ...mapActions(['getAdvs']),
+    ...mapActions(['createAdv']),
 
-    setWindowFull (val) {
-      let counter = 0
-      val.forEach(carAdv => {
-        if (carAdv.windowCar) {
-          counter++
-          if ( counter < 3) {
-            return
-          }
-          else {
-            this.windowFull = true
-          }
-        }
-      })
+    advCreation () {
+      this.$store.dispatch('createAdv', this.carDetails)
     },
 
-    onFileChange(e) {
+    imageFileSelection(e) {
       this.images = []
       let vm = this;
       var selectedFiles = e.target.files;
@@ -199,64 +305,145 @@ export default {
 
         reader.readAsDataURL(this.images[i]);
       }
+      this.advCreation()
+      this.showCreateAdvButton = true
     },
 
     async uploadImages (e) {
+      this.loader = true
       let fileUpload = this.$refs.fileInput
-      let files = fileUpload.files
+      let files = Array.prototype.slice.call(fileUpload.files)
       let newImageURLs = []
-      let record = (await firebase.database().ref(`/cars/${this.carAdvId}`).once('value')).val()
       let windowCarImgUrl = ''
 
-      files.forEach( async (file) => {
-        let storageRef = firebase.storage().ref(`images/in-stock-cars/${this.carAdvId}/${file.name}`)
+      await Promise.all(files.map(async (file) => {
+        let storageRef = firebase.storage().ref(`images/in-stock-cars/${this.carDetails.carAdvId}/${file.name}`)
         await storageRef.put(file)
-        storageRef.getDownloadURL().then((url) => {
+        await storageRef.getDownloadURL().then((url) => {
           if (file.name.indexOf('window') > -1)  {
             windowCarImgUrl = url
           }
           newImageURLs.push(url)
-          return newImageURLs
-        }).then((imgURLs) => {
-          firebase.database().ref(`/cars/${this.carAdvId}`).set({
-            ...record,
-            imageURLs: imgURLs,
-            windowCarImageUrl: windowCarImgUrl
-          })
-        });
-      })
+        })
+      }))
 
-      let setImageChanges = await firebase.database().ref(`/cars/${this.carAdvId}`).set({
+      firebase.database().ref(`/cars/${this.carDetails.carAdvId}`).set({
+        ...this.carDetails,
+        windowCarImageUrl: windowCarImgUrl,
         imageURLs: newImageURLs
       })
-
+      .then(() => {
+        window.location.reload()
+      })
     },
 
-    async createAd () {
-      const carData = {
-        make: this.make,
-        model: this.model,
-        year: this.year,
-        engineVolume: this.engineVolume,
-        status: this.status,
-        damageGrade: this.damageGrade,
-        running: this.running,
-        milege: this.milege,
-        additionalCosts: this.additionalCosts,
-        customTaxed: this.customTaxed,
-        price: this.price,
-        windowCar: this.windowCar,
-        imageURLs: ['0'],
-        windowCarImageUrl: '',
-        carAdvId: ''
-        }
-      try {
-        const carAdv = await this.$store.dispatch('createAdv', carData)
-        this.carAdvId = carAdv.id
-        this.profileDataFilled = true
-      } catch (error) {
-        throw error
+    async editAdv (e) {
+      this.advEditModeOn = true
+      this.editionId = this.$refs.edit[0].dataset.id
+      let car = (await firebase.database().ref(`/cars/${this.editionId}`).once('value')).val()
+
+      this.beginOfEditinState = {...car}
+      this.advEditDetails = {...car}
+
+      const filesList = await firebase.storage().ref().child(`/images/in-stock-cars/${this.editionId}`).listAll()
+      const filesArray = filesList.items
+      const imageNamesList = filesList.items.map(file => file.name)
+
+      if (filesArray.length) {
+        this.editionImages = car.imageURLs.map((picture, index) => {
+          return {
+            name: imageNamesList[index],
+            url: picture,
+            id: this.editionId
+          }
+        })
       }
+    },
+
+    deleteEditionPicture(e) {
+      const editPictureName = e.target.getAttribute('data-name')
+      this.imagesDeletedOnEdit.push(editPictureName)
+      this.editionImages.forEach((file, index) => {
+        if(file.name == editPictureName) {
+          this.editionImages.splice(index,1)
+        }
+      })
+    },
+
+    async stopEdition(e) {
+      this.advEditModeOn = false
+      firebase.database()
+        .ref(`/cars/${this.editionId}`)
+        .update({...this.beginOfEditinState})
+        .then(()=> {
+          window.location.reload()
+        })
+
+      const filesList = await firebase.storage().ref().child(`/images/in-stock-cars/${car.carAdvId}`).listAll()
+      const filesArray = filesList.items
+      const imageNamesList = filesList.items.map(file => file.name)
+
+      if (filesArray.length) {
+        this.editionImages = car.imageURLs.map((picture, index) => {
+          return {
+            name: imageNamesList[index],
+            url: picture,
+            id: this.editionId
+          }
+        })
+      }
+    },
+
+    finishEditing() {
+      this.advEditDetails.imageURLs = this.editionImages.map(image => image.url)
+      this.imagesDeletedOnEdit.forEach(async imageName => {
+          await firebase.storage().ref().child(`/images/in-stock-cars/${this.editionId}/${imageName}`).delete()
+      })
+      firebase.database()
+        .ref(`/cars/${this.editionId}`)
+        .update({...this.advEditDetails})
+        .then(()=> {
+            window.location.reload()
+        })
+    },
+
+    async deleteAdv () {
+      const advId = this.$refs.delete[0].dataset.id
+      let agree = confirm('Вы действительно хотите удалить обьявление?');
+      if (agree) {
+
+        // Removing Car Adv
+        let removedRecord = (await firebase.database().ref(`/cars/${advId}`)).remove()
+
+        // Delete the car pictures
+
+        const filesList = await firebase.storage().ref().child(`/images/in-stock-cars/${advId}`).listAll()
+        const filesArray = filesList.items
+        filesArray.forEach(file => {
+          firebase.storage().ref().child(`/images/in-stock-cars/${advId}/${file.name}`).delete()
+        })
+
+        window.location.reload()
+      }
+    },
+
+    tabSwitcher() {
+      this.creationTabActive = !this.creationTabActive
+    },
+
+    setWindowFull (val) {
+      let counter = 0
+      val.forEach(carAdv => {
+        if (carAdv.windowCar) {
+          counter++
+          if ( counter < 3) {
+            return
+          }
+          else {
+            this.windowFull = true
+          }
+        }
+      })
     },
 
     logout () {
@@ -266,3 +453,29 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss">
+.tabs-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.tab {
+  border: 1px solid #1cb841;
+  padding: 20px;
+
+  &:last-child {
+    border-left: none;
+  }
+
+  &.active {
+    background: rgba($color: #1cb841, $alpha: .4);
+  }
+}
+
+.creation-area {
+  display: flex;
+}
+</style>

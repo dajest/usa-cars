@@ -494,168 +494,321 @@ button.subscribe-action {
 }
 
 
-
 // Admin Page
 
 .admin-page {
   color: #FFFFFF;
-  background-color: #6C6B6B;
-  display: flex;
   padding: 20px;
+  position: relative;
 
-  h1 {
-    margin: 0;
+  .loader {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
-  .car-profile-form-creation {
 
-    .create-new-form {
-      background: #C21010;
-      border-radius: 5px;
-      text-transform: uppercase;
-      padding: 10px 20px;
-      margin-top: 10px;
-      outline: none;
-      border: none;
-      color: #FFFFFF;
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
+  .tabs-wrapper {
+    .tab {
       cursor: pointer;
     }
+  }
+
+  // .admin-page-header {
+  //   text-align: center;
+  // }
+
+  // .creation-steps {
+  //   display: flex;
+  //   justify-content: center;
+  //   margin-bottom: 20px;
+
+  //   .step {
+  //     height: 75px;
+  //     width: 75px;
+  //     display: flex;
+  //     justify-content: center;
+  //     align-items: center;
+  //     font-size: 40px;
+  //     border: 1px solid #FFFFFF;
+  //     border-radius: 50%;
+  //   }
+  // }
+
+  .car-profile-form-creation {
+    flex: 1;
+    // margin-bottom: 45px;
 
     .form {
-      width: 300px;
       padding: 10px;
-      border: 1px solid #C21010;
+      border: 1px solid #1cb841;
+      border-right: none;
+
+      .form-line {
+        display: flex;
+        // flex-wrap: wrap;
+        // justify-content: center;
+      }
     }
 
     .input-field {
-      padding: 5px 5px 5px 10px;
-      width: 100%;
+      flex: 1;
+      padding: 10px 10px 10px 10px;
+      width: 300px;
       box-sizing: border-box;
       margin-bottom: 5px;
 
       &.checkbox {
         display: flex;
-        justify-content: space-between;
+        align-items: center;
         input {
-          margin: 1px 0;
+          margin: 0 0 0 10px;
           width: auto;
         }
       }
 
-      label {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
       input {
         width: 100%;
         box-sizing: border-box;
         border: none;
         outline: none;
-        height: 25px;
+        height: 40px;
+        border-radius: 4px;
         padding-left: 8px;
+        border: 1px solid transparent;
+
+        &:focus {
+          border: 1px solid #03a518;
+        }
       }
+    }
+
+    .update-form, .upload-images {
+      background: rgb(28, 184, 65);
+      border-radius: 5px;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      margin: 10px auto 0 auto;
+      outline: none;
+      border: none;
+      color: #FFFFFF;
+      width: 300px;
+      box-sizing: border-box;
+      text-align: center;
+      cursor: pointer;
     }
   }
 
   .car-images-block {
-    padding: 10px;
-    border: 1px solid #C21010;
-    margin: 0 0 0 10px;
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #1cb841;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+
+    .select-file-box {
+      height: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      // text-align: center;
+      // position: relative;
+
+
+      .choose-foto-btn-block {
+        #file-select {
+          width: 0.1px;
+          height: 0.1px;
+          opacity: 0;
+          overflow: hidden;
+          position: absolute;
+          z-index: -1;
+
+          & + label {
+            background: #1cb841;
+            border-radius: 5px;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            color: #FFFFFF;
+            cursor: pointer;
+            position: relative;
+            top: 10px;
+          }
+        }
+      }
+
+      .create-adv-button-block {
+        position: relative;
+        top: 10px;
+      }
+
+    }
+
+    .create-adv {
+      background: rgb(28, 184, 65);
+      border-radius: 5px;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      outline: none;
+      border: none;
+      color: #FFFFFF;
+      width: 300px;
+      box-sizing: border-box;
+      text-align: center;
+      cursor: pointer;
+      // position: absolute;
+      // bottom: 20px;
+      // left: 50%;
+      // transform: translateX(-50%);
+
+      &.disabled {
+        opacity: 0.25;
+        cursor: not-allowed;
+      }
+    }
 
     .image-preview-wrapper {
       display: flex;
       flex-wrap: wrap;
-      margin-top: 15px;
+      padding: 30px 0;
 
       .image-preview {
-        height: 100px;
         width: 100px;
-        margin-right: 15px;
-        background-color: #FFFFFF;
+        margin: 0 15px 15px 0;
+        border: 1px solid #1cb841;
+
         img {
-          width: 100%;
-          height: 100%;
+          width: 100px;
+          height: 100px;
+        }
+
+        .image-name {
+          font-size: 12px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
+    }
+
+    .image-action-btn-block {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 60px;
     }
   }
 
   .car-list-block {
     padding: 10px;
-    border: 1px solid #C21010;
     margin: 0 0 0 10px;
     flex: 1;
 
     .car-list-item {
       background-color: darkcyan;
-      height: 60px;
+      height: 65px;
       padding: 5px;
       box-sizing: border-box;
-      display: flex;
+      overflow: hidden;
 
-      .car-image {
-        height: 50px;
-        margin: 0 20px 0 0;
+      &.open {
+        height: auto;
+      }
 
-        img {
-          height: 100%;
+      .car-details-block {
+        box-sizing: border-box;
+        display: flex;
+        height: 55px;
+
+        .car-image {
+          height: 50px;
+          margin: 0 20px 0 0;
+
+          img {
+            height: 100%;
+          }
+        }
+
+        .car-name-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          font-size: 12px;
+          margin: 0 20px 0 0;
+          padding: 0 20px 0 0;
+          border-right: 1px solid darkgray;
+        }
+
+        .car-milege {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          margin: 0 20px 0 0;
+          padding: 0 20px 0 0;
+          border-right: 1px solid darkgray;
+
+          .milege-header {
+            font-size: 14px;
+            margin-bottom: 5px;
+          }
+        }
+
+        .car-price {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+          padding: 0 20px 0 0;
+          border-right: 1px solid darkgray;
+
+          .car-price-header {
+            font-size: 14px;
+            margin-bottom: 5px;
+          }
+        }
+
+        .car-adv-action-block {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          font-size: 11px;
+
+          .edit-action {
+            margin-bottom: 5px;
+            background-color: darkgreen;
+            padding: 5px;
+
+            &:hover {
+              background-color: rgba(darkgreen, 0.4);
+              cursor: pointer;
+            }
+          }
+
+          .delete-action {
+            background-color: darkred;
+            padding: 5px;
+
+            &:hover {
+              background-color: rgba(darkred, 0.4);
+              cursor: pointer;
+            }
+          }
+
+
         }
       }
 
-      .car-name-info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        font-size: 12px;
-        margin: 0 20px 0 0;
-        padding: 0 20px 0 0;
-        border-right: 1px solid darkgray;
+      .car-edit-form {
+        margin-top: 10px;
       }
 
-      .car-milege {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-size: 12px;
-        margin: 0 20px 0 0;
-        padding: 0 20px 0 0;
-        border-right: 1px solid darkgray;
-
-        .milege-header {
-          font-size: 14px;
-          margin-bottom: 5px;
-        }
-      }
-
-      .car-price {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-size: 12px;
-        padding: 0 20px 0 0;
-        border-right: 1px solid darkgray;
-
-        .car-price-header {
-          font-size: 14px;
-          margin-bottom: 5px;
-        }
-      }
-
-      .car-adv-action-block {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-
-        .edit-action {
-          margin-bottom: 5px;
-        }
-      }
     }
   }
 
@@ -666,6 +819,24 @@ button.subscribe-action {
   }
 }
 
+
+.finish-editing {
+  background: rgb(28, 184, 65);
+  border-radius: 5px;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  outline: none;
+  border: none;
+  color: #FFFFFF;
+  width: 300px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
+
+  &.hidden {
+    opacity: 0;
+  }
+}
 
 // Additional
 
